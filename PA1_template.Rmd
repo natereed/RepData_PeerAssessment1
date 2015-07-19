@@ -51,7 +51,18 @@ lookup_mean <- function(i) {
 
 # Replace missing steps with the mean from the daily_activity_pattern:
 activity <- mutate(activity, steps = ifelse(is.na(steps), lookup_mean(interval), steps))
-head(activity)
+
+# Create a histogram of the total number of steps taken each day
+summary_activity <- aggregate(steps ~ date, data=activity, FUN=sum)
+hist(as.numeric(summary_activity$steps), main="Histogram of summary_activity$steps", xlab="Total steps")
+
+paste("Total # of steps:", sum(summary_activity$steps))
+paste("Mean steps:", mean(summary_activity$steps))
+paste("Median steps: ", median(summary_activity$steps))
+
+# Do these values differ from the estimates from the first part of the assignment? 
+# Answer: The Total number of steps is greater in this data set, as expected. In the data set with
+# imputed values, the mean and median are both lower.
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
