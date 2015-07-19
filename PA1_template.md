@@ -137,22 +137,3 @@ plot(weekend_activity_pattern$interval, weekend_activity_pattern$steps, type="l"
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
-
-```r
-# Save to figure
-dev.copy(png, "figure/panelplot.png")
-```
-
-```
-## quartz_off_screen 
-##                 3
-```
-
-```r
-dev.off()
-```
-
-```
-## quartz_off_screen 
-##                 2
-```

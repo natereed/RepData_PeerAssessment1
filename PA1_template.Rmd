@@ -70,8 +70,4 @@ weekend_activity_pattern <- aggregate(steps ~ interval, data=weekend_activity, F
 par(mfrow=c(2,1))
 plot(weekday_activity_pattern$interval, weekday_activity_pattern$steps, type="l", ylab="Steps", main="Weekday activity")
 plot(weekend_activity_pattern$interval, weekend_activity_pattern$steps, type="l", ylab="Steps", main="Weekend activity")
-
-# Save to figure
-dev.copy(png, "figure/panelplot.png")
-dev.off()
 ```
