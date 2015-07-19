@@ -5,6 +5,10 @@ output:
     keep_md: true
 ---
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+```
+
 ## Loading and preprocessing the data
 ```{r, echo=TRUE}
 activity <- read.csv("activity.csv")
@@ -13,33 +17,59 @@ activity <- read.csv("activity.csv")
 ## What is mean total number of steps taken per day?
 ```{r, echo=TRUE}
 summary_activity <- aggregate(steps ~ date, data=activity, FUN=sum)
-hist(as.numeric(summary_activity$steps))
+hist(as.numeric(summary_activity$steps), main="Histogram of summary_activity$steps", xlab="Total steps")
 
-sum(summary_activity$steps)
-mean(summary_activity$steps)
-median(summary_activity$steps)
+paste("Total # of steps:", sum(summary_activity$steps))
+paste("Mean steps:", mean(summary_activity$steps))
+paste("Median steps: ", median(summary_activity$steps))
 ```
 
 
 ## What is the average daily activity pattern?
-# For this I'll take the mean of the daily steps grouped by each interval, across all days
 ```{r, echo=TRUE}
-daily <- aggregate(steps ~ interval, data=activity, FUN=mean)
-plot(daily$interval, daily$steps, type="l")
+daily_activity_pattern <- aggregate(steps ~ interval, data=activity, FUN=mean)
+plot(daily_activity_pattern$interval, daily_activity_pattern$steps, type="l", main="Avg. steps per 5-minute interval", xlab="Interval", ylab="# of Steps")
 
 # Interval with most activity across all days, on average
-subset(daily, daily$steps == max(daily$steps))
+most_active_interval <- subset(daily_activity_pattern, daily_activity_pattern$steps == max(daily_activity_pattern$steps))
+most_active_interval
+paste("Interval with most activity: ", most_active_interval$interval)
+
 ```
 
 ## Imputing missing values
 ```{r, echo=TRUE}
 missing_intervals <- subset(activity, is.na(activity$steps))
-
 # Number of intervals with missing steps
 length(missing_intervals$steps)
 
 # Impute missing values
+lookup_mean <- function(i) {
+  interval <- filter(daily_activity_pattern, interval == 0) %>% select(steps)
+  return(interval$steps)
+}
 
+# Replace missing steps with the mean from the daily_activity_pattern:
+activity <- mutate(activity, steps = ifelse(is.na(steps), lookup_mean(interval), steps))
+head(activity)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r, echo=TRUE}
+activity <- mutate(activity, 
+                   weekday_factor = factor(ifelse(weekdays(as.Date(date)) %in% c("Monday", "Tuesday", "Wednesday", 
+                                                                                 "Thursday", "Friday"), 
+                                                  "weekday", "weekend"),
+                                           levels=c("weekday", "weekend")));                  
+weekday_activity <- activity %>% filter(weekday_factor=="weekday")
+head(weekday_activity)
+weekday_activity_pattern <- aggregate(steps ~ interval, data=weekday_activity, FUN=mean)
+
+weekend_activity <- activity %>% filter(weekday_factor=="weekend")
+weekend_activity_pattern <- aggregate(steps ~ interval, data=weekend_activity, FUN=mean)
+par(mfrow=c(2,1))
+plot(weekday_activity_pattern$interval, weekday_activity_pattern$steps, type="l", ylab="Steps", main="Weekday activity")
+plot(weekend_activity_pattern$interval, weekend_activity_pattern$steps, type="l", ylab="Steps", main="Weekend activity")
+
+
+```
