@@ -121,18 +121,11 @@ hist(as.numeric(summary_activity$steps), main=&quot;Histogram of summary_activit
                                                   &quot;weekday&quot;, &quot;weekend&quot;),
                                            levels=c(&quot;weekday&quot;, &quot;weekend&quot;)));                  
 weekday_activity &lt;- activity %&gt;% filter(weekday_factor==&quot;weekday&quot;)
-head(weekday_activity)</code></pre>
-<pre><code>##      steps       date interval weekday_factor
-## 1 1.716981 2012-10-01        0        weekday
-## 2 1.716981 2012-10-01        5        weekday
-## 3 1.716981 2012-10-01       10        weekday
-## 4 1.716981 2012-10-01       15        weekday
-## 5 1.716981 2012-10-01       20        weekday
-## 6 1.716981 2012-10-01       25        weekday</code></pre>
-<pre class="r"><code>weekday_activity_pattern &lt;- aggregate(steps ~ interval, data=weekday_activity, FUN=mean)
+weekday_activity_pattern &lt;- aggregate(steps ~ interval, data=weekday_activity, FUN=mean)
 
 weekend_activity &lt;- activity %&gt;% filter(weekday_factor==&quot;weekend&quot;)
 weekend_activity_pattern &lt;- aggregate(steps ~ interval, data=weekend_activity, FUN=mean)
+
 par(mfrow=c(2,1))
 plot(weekday_activity_pattern$interval, weekday_activity_pattern$steps, type=&quot;l&quot;, ylab=&quot;Steps&quot;, main=&quot;Weekday activity&quot;)
 plot(weekend_activity_pattern$interval, weekend_activity_pattern$steps, type=&quot;l&quot;, ylab=&quot;Steps&quot;, main=&quot;Weekend activity&quot;)</code></pre>

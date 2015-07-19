@@ -138,24 +138,11 @@ activity <- mutate(activity,
                                                   "weekday", "weekend"),
                                            levels=c("weekday", "weekend")));                  
 weekday_activity <- activity %>% filter(weekday_factor=="weekday")
-head(weekday_activity)
-```
-
-```
-##      steps       date interval weekday_factor
-## 1 1.716981 2012-10-01        0        weekday
-## 2 1.716981 2012-10-01        5        weekday
-## 3 1.716981 2012-10-01       10        weekday
-## 4 1.716981 2012-10-01       15        weekday
-## 5 1.716981 2012-10-01       20        weekday
-## 6 1.716981 2012-10-01       25        weekday
-```
-
-```r
 weekday_activity_pattern <- aggregate(steps ~ interval, data=weekday_activity, FUN=mean)
 
 weekend_activity <- activity %>% filter(weekday_factor=="weekend")
 weekend_activity_pattern <- aggregate(steps ~ interval, data=weekend_activity, FUN=mean)
+
 par(mfrow=c(2,1))
 plot(weekday_activity_pattern$interval, weekday_activity_pattern$steps, type="l", ylab="Steps", main="Weekday activity")
 plot(weekend_activity_pattern$interval, weekend_activity_pattern$steps, type="l", ylab="Steps", main="Weekend activity")
