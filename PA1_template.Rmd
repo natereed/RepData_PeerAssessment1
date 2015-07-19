@@ -11,6 +11,7 @@ library(dplyr)
 
 ## Loading and preprocessing the data
 ```{r, echo=TRUE}
+unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
 
