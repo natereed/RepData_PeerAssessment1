@@ -5,6 +5,7 @@
 ## Loading and preprocessing the data
 
 ```r
+unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
 
